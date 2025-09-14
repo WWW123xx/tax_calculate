@@ -149,7 +149,7 @@ class TaxCalculator:
             '年度个税': annual_tax,
             '年终奖个税': bonus_tax if bonus_tax_method == "separate" else 0,
             '计税方式': "并入综合所得" if bonus_tax_method == "combined" else "单独计税",
-            '月度现金收入': monthly_cash,
+            '月度现金收入(不含公积金)': monthly_cash,
             '年度公积金收入': total_pf_income,
             '年度总收入': total_income,
             '年度应纳税所得额': annual_taxable_with_bonus
@@ -228,7 +228,7 @@ def main():
 
             # 格式化显示
             display_df = df[['公积金基数', '个人公积金', '公司公积金', '公司额外部分',
-                             '个人额外支付', '年度个税', '月度现金收入',
+                             '个人额外支付', '年度个税', '月度现金收入(不含公积金)',
                              '年度公积金收入', '年度总收入']].copy()
 
             for col in display_df.columns:
@@ -350,7 +350,7 @@ def main():
             axes[0, 1].grid(True, alpha=0.3)
 
             # 月度收入图表
-            axes[1, 0].plot(df['公积金基数'], df['月度现金收入'], 'b-', linewidth=2, marker='o', markersize=4, label='月度现金收入')
+            axes[1, 0].plot(df['公积金基数'], df['月度现金收入(不含公积金)'], 'b-', linewidth=2, marker='o', markersize=4, label='月度现金收入(不含公积金)')
             axes[1, 0].plot(df['公积金基数'], (df['个人公积金'] + df['公司公积金']), color='orange', linewidth=2, marker='o',
                             markersize=4,
                             label='月度公积金')
@@ -379,7 +379,7 @@ def main():
                 建议将公积金基数提高到 **{best['公积金基数']:,.0f} 元**
 
                 - 每年可增加收入 **{best['年度总收入'] - base_case['年度总收入']:,.0f} 元**
-                - 虽然每月现金收入减少 **{base_case['月度现金收入'] - best['月度现金收入']:,.0f} 元**
+                - 虽然每月现金收入减少 **{base_case['月度现金收入(不含公积金)'] - best['月度现金收入(不含公积金)']:,.0f} 元**
                 - 但公积金账户增加 **{best['年度公积金收入'] - base_case['年度公积金收入']:,.0f} 元/年**
                 - 且个税减少 **{base_case['年度个税'] - best['年度个税']:,.0f} 元/年**
                 """)
