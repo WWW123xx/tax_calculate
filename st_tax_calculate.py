@@ -184,7 +184,7 @@ def main():
             monthly_salary = st.number_input("月薪", min_value=0, value=22000, step=1000)
             
             social_base = st.number_input("社保基数", min_value=0, value=4812, step=100)
-            social_base_ratio= st.number_input("社保比例(%)", min_value=5, max_value=12, value=10.5, step=0.5)
+            social_base_ratio= st.number_input("社保比例(%)", min_value=5.0, max_value=12.0, value=10.5, step=0.5)
             special_deduction = st.number_input("专项附加扣除", min_value=0, value=1500, step=500)
         with col2:
             annual_bonus = st.number_input("年终奖", min_value=0, value=60000, step=5000)
@@ -433,6 +433,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
