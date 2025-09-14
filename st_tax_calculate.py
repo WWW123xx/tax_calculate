@@ -23,6 +23,7 @@ def set_chinese_font():
 
 
 # 在程序开始时调用
+fonts = fm.findSystemFonts()
 set_chinese_font()
 
 
@@ -429,4 +430,5 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
