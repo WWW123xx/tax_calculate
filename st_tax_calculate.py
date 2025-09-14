@@ -16,7 +16,7 @@ st.set_page_config(
 # 设置中文字体支持
 def set_chinese_font():
     try:
-        plt.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans', 'Microsoft YaHei', 'sans-serif'] 
+        plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Microsoft YaHei', 'sans-serif'] 
         plt.rcParams['axes.unicode_minus'] = False
     except:
         st.warning("中文字体设置可能不成功，图表可能显示乱码")
@@ -202,7 +202,7 @@ def main():
         bonus_tax_method = "combined" if bonus_tax_method == "并入综合所得" else "separate"
 
         # 计算按钮
-        calculate_clicked = st.button("开始计算", type="primary", use_container_width=True)
+        calculate_clicked = st.button("开始计算", type="primary", width=True)
 
     # 主内容区域
     if calculate_clicked:
@@ -239,7 +239,7 @@ def main():
 
             # 显示结果表格
             st.header("📊 计算结果")
-            st.dataframe(display_df.style.format("{:,.0f}"), use_container_width=True)
+            st.dataframe(display_df.style.format("{:,.0f}"), width=True)
 
             # 显示分析结果
             st.header("🎯 结果分析")
@@ -430,6 +430,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
