@@ -163,7 +163,7 @@ def get_user_input():
     }
 
     inputs = {}
-    inputs["社保基数"] =  inputs["社保基数"] * 0.08
+
     for param, default in default_values.items():
         prompt = f"请输入{param} (默认: {default}): "
         value = input(prompt).strip()
@@ -189,7 +189,7 @@ def get_user_input():
     else:
         bonus_tax_method = "combined"
         print("已选择: 年终奖并入综合所得")
-
+    inputs["社保费用"] = inputs["社保基数"] * 0.08
     return inputs, bonus_tax_method
 
 
