@@ -27,7 +27,7 @@ fonts = fm.findSystemFonts()
 for font in fonts:
     font_lower = font.lower()
     if any(keyword in font_lower for keyword in ['chi', 'cjk', 'zh', 'chinese', 'heiti', 'song', 'sim', 'ms', 'noto', 'wen', 'arial']):
-        print(font)
+        st.write(font)
 set_chinese_font()
 
 
@@ -434,6 +434,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
