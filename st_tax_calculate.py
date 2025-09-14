@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
-import matplotlib.font_manager as fm
+from matplotlib.font_manager import fontManager
 # 设置页面配置
 st.set_page_config(
     page_title="公积金优化计算器",
@@ -15,20 +15,16 @@ st.set_page_config(
 
 # 设置中文字体支持
 def set_chinese_font():
-    try:
-        fm.fontManager.addfont('/simhei.ttf') #临时注册新的全局字体
-        plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
-        plt.rcParams['axes.unicode_minus']=False#用来正常显示负号
-    except:
-        st.warning("中文字体设置可能不成功，图表可能显示乱码")
+    font_path = os.path.join(os.path.dirname(__file__), 'simhei.ttf')  # 根据你的实际项目结构调整路径
+    if os.path.exists(font_path):
+        fontManager.addfont(font_path)
+        plt.rcParams['font.family'] = ['SimHei'] # 或者字体文件的实际名称
+        plt.rcParams['axes.unicode_minus'] = False
+    else:
+        print(f"Warning: Font file not found at {font_path}")
 
 
 # 在程序开始时调用
-fonts = fm.findSystemFonts()
-for font in fonts:
-    font_lower = font.lower()
-    if any(keyword in font_lower for keyword in ['chi', 'cjk', 'zh', 'chinese', 'heiti', 'song', 'sim', 'ms', 'noto', 'wen', 'arial']):
-        st.write(font)
 set_chinese_font()
 
 
@@ -435,6 +431,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
