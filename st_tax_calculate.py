@@ -182,16 +182,19 @@ def main():
 
         with col1:
             monthly_salary = st.number_input("月薪", min_value=0, value=22000, step=1000)
-            annual_bonus = st.number_input("年终奖", min_value=0, value=60000, step=5000)
+            
             social_base = st.number_input("社保基数", min_value=0, value=4812, step=100)
+            social_base_ratio= st.slider("社保比例", min_value=0.05, max_value=0.12, value=0.105, step=0.01)
 
         with col2:
-            special_deduction = st.number_input("专项附加扣除", min_value=0, value=1500, step=500)
+            annual_bonus = st.number_input("年终奖", min_value=0, value=60000, step=5000)
             company_base = st.number_input("公司公积金基数", min_value=0, value=7000, step=1000)
+            special_deduction = st.number_input("专项附加扣除", min_value=0, value=1500, step=500)
+            
             pf_ratio = st.slider("公积金比例", min_value=0.05, max_value=0.12, value=0.12, step=0.01)
 
         # 计算社保费用
-        social_insurance = social_base * 0.08
+        social_insurance = social_base * social_base_ratio
 
         # 选择年终奖计税方式
         bonus_tax_method = st.radio(
@@ -204,7 +207,7 @@ def main():
         bonus_tax_method = "combined" if bonus_tax_method == "并入综合所得" else "separate"
 
         # 计算按钮
-        calculate_clicked = st.button("开始计算", type="primary", width=True)
+        calculate_clicked = st.button("开始计算", type="primary", use_container_width=True)
 
     # 主内容区域
     if calculate_clicked:
@@ -432,6 +435,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
