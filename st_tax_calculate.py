@@ -241,7 +241,7 @@ def main():
 
             # 显示结果表格
             st.header("📊 计算结果")
-            st.dataframe(display_df.style.format("{:,.0f}"), width=True)
+            st.dataframe(display_df.style.format("{:,.0f}"), use_container_width=True)
 
             # 显示分析结果
             st.header("🎯 结果分析")
@@ -432,6 +432,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
