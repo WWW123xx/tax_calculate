@@ -16,8 +16,9 @@ st.set_page_config(
 # 设置中文字体支持
 def set_chinese_font():
     try:
-        plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'sans-serif'] 
-        plt.rcParams['axes.unicode_minus'] = False
+        fm.fontManager.addfont('/SimHei.ttf') #临时注册新的全局字体
+        plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
+        plt.rcParams['axes.unicode_minus']=False#用来正常显示负号
     except:
         st.warning("中文字体设置可能不成功，图表可能显示乱码")
 
@@ -434,6 +435,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
