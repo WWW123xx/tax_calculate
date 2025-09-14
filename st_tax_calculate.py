@@ -144,7 +144,7 @@ class TaxCalculator:
             '公积金基数': target_base,
             '个人公积金': personal_pf,
             '公司公积金': company_pf,
-            '公司额外部分': company_extra_pf,
+            '公司额外部分(由个人承担)': company_extra_pf,
             '个人额外支付': extra_payment,
             '年度个税': annual_tax,
             '年终奖个税': bonus_tax if bonus_tax_method == "separate" else 0,
@@ -227,7 +227,7 @@ def main():
             df = pd.DataFrame(results)
 
             # 格式化显示
-            display_df = df[['公积金基数', '个人公积金', '公司公积金', '公司额外部分',
+            display_df = df[['公积金基数', '个人公积金', '公司公积金', '公司额外部分(由个人承担)',
                              '个人额外支付', '年度个税', '月度现金收入(不含公积金)',
                              '年度公积金收入', '年度总收入(包含公积金)']].copy()
 
@@ -433,6 +433,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
