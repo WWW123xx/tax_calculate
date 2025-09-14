@@ -137,7 +137,7 @@ class TaxCalculator:
         # 5. 计算公积金账户总收入（个人+公司部分）
         total_pf_income = (personal_pf + company_pf) * 12
 
-        # 6. 计算年度总收入
+        # 6. 计算年度总收入(包含公积金)
         total_income = monthly_cash * 12 + total_pf_income + self.annual_bonus
 
         return {
@@ -151,7 +151,7 @@ class TaxCalculator:
             '计税方式': "并入综合所得" if bonus_tax_method == "combined" else "单独计税",
             '月度现金收入(不含公积金)': monthly_cash,
             '年度公积金收入': total_pf_income,
-            '年度总收入': total_income,
+            '年度总收入(包含公积金)': total_income,
             '年度应纳税所得额': annual_taxable_with_bonus
         }
 
@@ -229,14 +229,14 @@ def main():
             # 格式化显示
             display_df = df[['公积金基数', '个人公积金', '公司公积金', '公司额外部分',
                              '个人额外支付', '年度个税', '月度现金收入(不含公积金)',
-                             '年度公积金收入', '年度总收入']].copy()
+                             '年度公积金收入', '年度总收入(包含公积金)']].copy()
 
             for col in display_df.columns:
                 if col != '公积金基数':
                     display_df[col] = display_df[col].round(0).astype(int)
 
             # 分析结果
-            best_idx = df['年度总收入'].idxmax()
+            best_idx = df['年度总收入(包含公积金)'].idxmax()
             best = df.iloc[best_idx]
             base_case = df.iloc[0]  # 公司基数的情况
 
@@ -251,31 +251,31 @@ def main():
 
             with col1:
                 st.metric(
-                    label="公司基数下年度总收入",
-                    value=f"{base_case['年度总收入']:,.0f}元"
+                    label="公司基数下年度总收入(包含公积金)",
+                    value=f"{base_case['年度总收入(包含公积金)']:,.0f}元"
                 )
 
             with col2:
                 st.metric(
-                    label="最优基数下年度总收入",
-                    value=f"{best['年度总收入']:,.0f}元"
+                    label="最优基数下年度总收入(包含公积金)",
+                    value=f"{best['年度总收入(包含公积金)']:,.0f}元"
                 )
 
             with col3:
-                increase = best['年度总收入'] - base_case['年度总收入']
+                increase = best['年度总收入(包含公积金)'] - base_case['年度总收入(包含公积金)']
                 st.metric(
                     label="收入增加",
                     value=f"{increase:,.0f}元",
-                    delta=f"{increase / base_case['年度总收入'] * 100:.2f}%" if increase > 0 else None
+                    delta=f"{increase / base_case['年度总收入(包含公积金)'] * 100:.2f}%" if increase > 0 else None
                 )
 
-            if best['年度总收入'] > base_case['年度总收入']:
+            if best['年度总收入(包含公积金)'] > base_case['年度总收入(包含公积金)']:
                 # 详细分析
                 tax_saving = base_case['年度个税'] - best['年度个税']
                 pf_increase = best['年度公积金收入'] - base_case['年度公积金收入']
                 extra_cost = best['个人额外支付'] * 12
 
-                st.success(f"✅ 提高基数可增加年收入: {increase:,.0f} 元 (+{increase / base_case['年度总收入'] * 100:.2f}%)")
+                st.success(f"✅ 提高基数可增加年收入: {increase:,.0f} 元 (+{increase / base_case['年度总收入(包含公积金)'] * 100:.2f}%)")
 
                 st.subheader("📈 详细分析")
                 analysis_col1, analysis_col2, analysis_col3 = st.columns(3)
@@ -323,22 +323,22 @@ def main():
                 st.write(f"公积金增加: {base_best['年度公积金收入'] - base_company['年度公积金收入']:,.0f} 元")
 
             with col6:
-                st.write(f"总收入增加: {base_best['年度总收入'] - base_company['年度总收入']:,.0f} 元")
+                st.write(f"总收入增加: {base_best['年度总收入(包含公积金)'] - base_company['年度总收入(包含公积金)']:,.0f} 元")
 
             # 绘制图表
             st.header("📈 可视化分析")
 
             fig, axes = plt.subplots(2, 2, figsize=(15, 12))
 
-            # 年度总收入图表
-            axes[0, 0].plot(df['公积金基数'], df['年度总收入'], 'g-', linewidth=2, marker='o', markersize=4)
+            # 年度总收入(包含公积金)图表
+            axes[0, 0].plot(df['公积金基数'], df['年度总收入(包含公积金)'], 'g-', linewidth=2, marker='o', markersize=4)
             axes[0, 0].axvline(x=company_base, color='r', linestyle='--', alpha=0.7, label=f'公司基数 ({company_base})')
             if best['公积金基数'] != company_base:
                 axes[0, 0].axvline(x=best['公积金基数'], color='orange', linestyle='--', alpha=0.7,
                                    label=f'最优 ({best["公积金基数"]})')
             axes[0, 0].set_xlabel('公积金基数 (元)')
-            axes[0, 0].set_ylabel('年度总收入 (元)')
-            axes[0, 0].set_title(f'年度总收入 vs 公积金基数\n(年终奖计税方式: {results[0]["计税方式"]})')
+            axes[0, 0].set_ylabel('年度总收入(包含公积金) (元)')
+            axes[0, 0].set_title(f'年度总收入(包含公积金) vs 公积金基数\n(年终奖计税方式: {results[0]["计税方式"]})')
             axes[0, 0].legend()
             axes[0, 0].grid(True, alpha=0.3)
 
@@ -361,7 +361,7 @@ def main():
             axes[1, 0].grid(True, alpha=0.3)
 
             # 收入增加图表
-            income_increase = df['年度总收入'] - base_case['年度总收入']
+            income_increase = df['年度总收入(包含公积金)'] - base_case['年度总收入(包含公积金)']
             axes[1, 1].bar(df['公积金基数'], income_increase, alpha=0.6, color='green')
             axes[1, 1].set_xlabel('公积金基数 (元)')
             axes[1, 1].set_ylabel('收入增加金额 (元)')
@@ -378,7 +378,7 @@ def main():
                 st.success(f"""
                 建议将公积金基数提高到 **{best['公积金基数']:,.0f} 元**
 
-                - 每年可增加收入 **{best['年度总收入'] - base_case['年度总收入']:,.0f} 元**
+                - 每年可增加收入 **{best['年度总收入(包含公积金)'] - base_case['年度总收入(包含公积金)']:,.0f} 元**
                 - 虽然每月现金收入减少 **{base_case['月度现金收入(不含公积金)'] - best['月度现金收入(不含公积金)']:,.0f} 元**
                 - 但公积金账户增加 **{best['年度公积金收入'] - base_case['年度公积金收入']:,.0f} 元/年**
                 - 且个税减少 **{base_case['年度个税'] - best['年度个税']:,.0f} 元/年**
@@ -398,12 +398,12 @@ def main():
             with col1:
                 st.subheader("并入综合所得")
                 st.metric("年度个税", f"{base_result_combined['年度个税']:,.0f}元")
-                st.metric("年度总收入", f"{base_result_combined['年度总收入']:,.0f}元")
+                st.metric("年度总收入(包含公积金)", f"{base_result_combined['年度总收入(包含公积金)']:,.0f}元")
 
             with col2:
                 st.subheader("单独计税")
                 st.metric("年度个税", f"{base_result_separate['年度个税']:,.0f}元")
-                st.metric("年度总收入", f"{base_result_separate['年度总收入']:,.0f}元")
+                st.metric("年度总收入(包含公积金)", f"{base_result_separate['年度总收入(包含公积金)']:,.0f}元")
 
             if base_result_combined['年度个税'] < base_result_separate['年度个税']:
                 tax_saving = base_result_separate['年度个税'] - base_result_combined['年度个税']
@@ -433,6 +433,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
