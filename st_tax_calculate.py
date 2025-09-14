@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
 from matplotlib.font_manager import fontManager
-import os
 # 设置页面配置
 st.set_page_config(
     page_title="公积金优化计算器",
@@ -432,6 +431,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
