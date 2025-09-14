@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
-
+import matplotlib.font_manager as fm
 # 设置页面配置
 st.set_page_config(
     page_title="公积金优化计算器",
@@ -430,5 +430,6 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
